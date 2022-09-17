@@ -1,0 +1,714 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Api Maricá Telecom",
+    "description": "API desenvolvidas para dar suporte tanto ao painel de gerenciamente, quanto ao aplicativo móvel da Maricá Telecom.",
+    "contact": {
+      "email": "renantorres@ols-br.com"
+    },
+    "license": "Maricá Telecom",
+    "version":"1.0.0"
+  },
+  "servers": [
+    {
+      "url":"http://localhost:3001/",
+      "description":"API de produção"
+    },
+    {
+      "url":"http://localhost:3002/",
+      "description":"API de teste: em desenvolvimento"
+    }
+  ],
+  "paths": {
+    "/api/users/login":{
+      "summary": "Login de usuários MVNO",
+      "description": "Rota utilizada para login e geração do token.",
+      "tags": ["UsuáriosMVNO"],
+      "post":{
+        "summary": "Login de usuário",
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/login"
+              },
+              "examples":{
+                "Usuário":{
+                  "value":{
+                    "email": "renantorres@ols-br.com",
+                    "password": "renan123456ols"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "200":{
+            "description":"ok",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "loginResp":{
+                    "type":"object",
+                    "properties":{
+                      "success": {"type":"number"},
+                      "message": {"type":"string"},
+                      "token": {"type":"string"}
+
+                    }
+                  }
+                },
+                "examples":{
+                  "loginConcluido":{
+                    "value":{
+                      "success": 1,
+                      "message": "Login succefuly",
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOnsiaWQiOjUsIm5vbWUiOiJBbWlsdG9uIiwibG9naW4iOiJBbGVtaWRhIiwiZW1haWwiOiJqZXNzaWNhQHN0cmluZyIsInNlbmhhIjoiJDJhJDEwJFViN1hMZGRwbmFDMHZxTE45Q3lGRHU1OC5GdDZHWGpwdFpwRkd0aVVIWXB3N0REb2ZnclNHIiwibnVtYmVyIjo3NTYzOX0sImlhdCI6MTY2MzA2ODM0OCwiZXhwIjoxNjYzMDcxOTQ4fQ.ZTGPn7E7Di_dBXX7IKZVFc0dO1hBHPyl3oi-PZb14gs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400":{
+          "description":"Acess denied! Unautorized user.",
+          "content":{
+            "application/json":{
+              "schema":{
+                "loginResp":{
+                  "type":"object",
+                  "properties":{
+                    "success": {"type":"number"},
+                    "message": {"type":"string"}
+                  }
+                }
+              },
+              "examples":{
+                "loginConcluido":{
+                  "value":{
+                    "success": 0,
+                    "message": "Invalid email or password or Params not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{id}":{
+      "summary": "Busca, atualização ou exclusão de usuários MVNO",
+      "description": "Esta rota é responsável pela Criação, Leitura, Atualização, Exclusão e login de usuários. O método http definirá o tipo de recurso utilizado.",
+      "tags": ["UsuáriosMVNO"],
+      "get": {
+        "summary": "Lista todos os usuários",
+        "description": "O método get, sem a passagem de id, é utilizado para listar os usuários MVNO cadastrados.",
+        "security": [{"Authorization": [] }],
+        "parameters":{
+          "name":"id",
+          "in":"path",
+          "description":"O id deverá ser enviado para consultas individuais.",
+          "required": true,
+          "type":"number"
+        },
+        "responses":{
+          "200":{
+            "description": "ok.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "data":{
+                        "type":"array",
+                        "$ref":"#/components/schemas/User"
+                      }
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 1,
+                      "data": {
+                        "id": 6,
+                        "firstName": "Renan",
+                        "familyName": "de Souza",
+                        "login": "rsouza",
+                        "email": "engrtorres@outlook.com",
+                        "password": "Naribao1",
+                        "hierarchy": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "Acess denied! Unautorized user. / Invalid token.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Invalid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "User not found or fail to update",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Record not found!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }  
+    },
+    "/api/users":{
+      "summary": "CRUD de usuários MVNO",
+      "description": "Esta rota é responsável pela Criação, Leitura, Atualização, Exclusão e login de usuários. O método http definirá o tipo de recurso utilizado.",
+      "tags": ["UsuáriosMVNO"],
+      "get": {
+        "summary": "Lista todos os usuários",
+        "description": "O método get, sem a passagem de id, é utilizado para listar os usuários MVNO cadastrados.",
+        "security": [{"Authorization": [] }],
+        "responses":{
+          "200":{
+            "description": "ok.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "data":{
+                        "type":"array",
+                        "$ref":"#/components/schemas/User"
+                      }
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 1,
+                      "data": [
+                        {
+                          "id": 6,
+                          "nome": "Renan",
+                          "login": "Torres",
+                          "email": "renantorres@ols-br.com",
+                          "id_grupo_funcionalidade": 2
+                        },
+                        {
+                          "id": 7,
+                          "nome": "Marco",
+                          "login": "Robadey",
+                          "email": "marcorobadey@ols-br.com",
+                          "id_grupo_funcionalidade": 3
+                        },
+                        {
+                          "id": 8,
+                          "nome": "Matheus",
+                          "login": "matheus",
+                          "email": "methues@string",
+                          "id_grupo_funcionalidade": 1
+                        },
+                        {
+                          "id": 9,
+                          "nome": "Hudson",
+                          "login": "hudsoares",
+                          "email": "hudsonsoares@ols-br.com",
+                          "id_grupo_funcionalidade": 2
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "Acess denied! Unautorized user. / Invalid token.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Invalid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "User not found or fail to update",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "No users listed yet!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      
+      "post": {
+        "summary": "Cadastra usuário",
+        "description": "O método post cadastro de um novo usuário.",
+        "security": [{"Authorization": [] }],
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref": "#/components/schemas/UserRegister"
+              },
+              "examples":{
+                "Usuário":{
+                  "value":{
+                    "firstName": "Renan",
+                    "familyName": "de Souza",
+                    "login": "rsouza",
+                    "email": "engrtorres@outlook.com",
+                    "password": "123456",
+                    "hierarchy": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "200":{
+            "description": "ok",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "$ref":"#/components/schemas/DBresponse"
+                } 
+              }
+            },
+            "examples":{
+              "resposta": {
+                "value": {
+                  "success": 1,
+                  "data": {
+                    "fieldCount": 0,
+                    "affectedRows": 1,
+                    "insertId": 7,
+                    "serverStatus": 2,
+                    "warningCount": 0,
+                    "message": "",
+                    "protocol41": true,
+                    "changedRows": 0
+                  }
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "Acess denied! Unautorized user. / Invalid token.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Invalid token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Atualizar usuário",
+        "description": "Atualizar usuário encontrando o usuário pelo id.",
+        "security": [{"Authorization": [] }],
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref": "#/components/schemas/User"
+              },
+              "examples":{
+                "Usuário":{
+                  "value":{
+                    "id":5,
+                    "firstName": "Renan",
+                    "familyName": "de Souza",
+                    "login": "rsouza",
+                    "email": "engrtorres@outlook.com",
+                    "password": "123456",
+                    "hierarchy": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{    
+          "200":{
+            "description": "ok.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 1,
+                      "message": "update successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "Acess denied! Unautorized user. / Invalid token.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Invalid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "User not found or fail to update",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Failed to update user"
+                    }
+                  }
+                }
+              }
+            },
+            "412":{
+              "description": "Invalid params",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "Users":{
+                      "type":"object",
+                      "properties":{
+                        "success":{"type": "number"},
+                        "message":{"type":"string"},
+                        "serverMessage":{"type":"string"}
+                      } 
+                    }
+                  },
+                  "examples":{
+                    "Usuários":{
+                      "value":{
+                        "success": 0,
+                        "message": "Missing params.",
+                        "serverMessage": "Illegal arguments: undefined, string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar usuário.",
+        "description": "Delete o usuário selecionado pelo id.",
+        "security": [{"Authorization": [] }],
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref": "#/components/schemas/User"
+              },
+              "examples":{
+                "Usuário":{
+                  "value":{
+                    "id":5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          
+          "200":{
+            "description": "ok.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 1,
+                      "message": "User deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401":{
+            "description": "Acess denied! Unautorized user. / Invalid token.",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "Invalid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description": "User not found or fail to update",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "Users":{
+                    "type":"object",
+                    "properties":{
+                      "success":{"type": "number"},
+                      "message":{"type":"string"}
+                    } 
+                  }
+                },
+                "examples":{
+                  "Usuários":{
+                    "value":{
+                      "success": 0,
+                      "message": "User not found!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components":{
+    "schemas":{
+      "User":{
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"number"
+          },
+          "firstName":{
+            "type":"string"
+          },
+          "familyName": {
+            "type":"string"
+          },
+          "login":{
+            "type":"string"
+          },
+          "password":{
+            "type":"string"
+          },
+          "email":{
+            "type":"string"
+          },
+          "hierarchy":{
+            "type":"number"
+          }
+        }
+      },
+      "UserRegister":{
+        "type":"object",
+        "properties":{
+          "firstName":{
+            "type":"string"
+          },
+          "familyName": {
+            "type":"string"
+          },
+          "login":{
+            "type":"string"
+          },
+          "password":{
+            "type":"string"
+          },
+          "email":{
+            "type":"string"
+          },
+          "hierarchy":{
+            "type":"number"
+          }
+        }
+        
+      },
+      "DBresponse":{
+        "type":"object",
+        "properties":{
+          "success":{
+            "type":"number"
+          },
+          "data":{
+            "type":"object",
+            "properties":{
+              "fieldCount": {"type": "number"},
+              "affectedRows": {"type": "number"},
+              "insertId": {"type": "number"},
+              "serverStatus": {"type": "number"},
+              "warningCount": {"type": "number"},
+              "message": {"type": "string"},
+              "protocol41": {"type": "boolean"},
+              "changedRows": {"type": "number"}
+            }
+          }
+        }
+      },
+      "login":{
+        "type":"object",
+        "properties":{
+          "email":{"type":"string"},
+          "password":{"type":"string"}
+        }
+      }
+      
+    },
+    "securitySchemes":{
+      "Authorization":{
+        "type":"http",
+        "scheme": "bearer",
+        "bearerFormat":"JWT"
+      }
+    }
+  }
+}

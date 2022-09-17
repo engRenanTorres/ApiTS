@@ -1,0 +1,5 @@
+node_modules
+configDB.js
+.env
+.env.test
+build
