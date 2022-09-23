@@ -33,7 +33,7 @@ import app from "../../app";
   it("should return a token", async () => {
       const login = {
             email: "engrtorres@outlook.com",
-            password: "Naribao1"
+            password: "123456"
       }
       const response = await request(server).post("/api/users/login").send(login);
 
