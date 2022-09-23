@@ -1,4 +1,4 @@
-import mysql, {createPool} from "mysql";
+import {createPool} from "mysql";
 require("dotenv").config({
     path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
 });

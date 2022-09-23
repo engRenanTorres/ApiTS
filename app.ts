@@ -1,5 +1,5 @@
 import express from "express";
-import  userRouter  from "./src/users/userRouter";
+import  userRouter  from "./api/users/userRouter";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./swagger.json";
 
@@ -15,10 +15,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 export default app;
-const port = process.env.APP_PORT || 3001;
 
-app.listen(port, ()=>{
-    console.log(`listening on *:${port}\nlink: http://localhost:${port}/`)
-})
 
 
