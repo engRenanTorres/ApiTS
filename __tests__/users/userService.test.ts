@@ -25,21 +25,23 @@ describe("Users CRUD", () => {
   
     it("should return a denied access", async () => {
         const login = {
-              email: "engrtorres@outlook.com",
+              login: "engrtorres@outlook.com",
               password: "wrongpassword"
         }
         const response = await request(server).post("/api/users/login")
-        .send(login)
-        expect(response.status).toBe(412);
+          .send(login)
+          expect(response.status).toBe(412);
         
     });
   
     it("should return a token", async () => {
         const login = {
-              email: "engrtorres@outlook.com",
+              login: "engrtorres@outlook.com",
               password: "Naribao1"
         }
-        const response = await request(server).post("/api/users/login").send(login);
+        const response = await request(server)
+          .post("/api/users/login")
+          .send(login);
   
         token = response.body.token;
   
@@ -73,11 +75,12 @@ describe("Users CRUD", () => {
         hierarchy:0
       }
       const response = await request(server)
-      .post("/api/users")
-      .send(newUser)
-      .set('Authorization', `Bearer ${token}`);
+        .post("/api/users")
+        .send(newUser)
+        .set('Authorization', `Bearer ${token}`);
   
-      expect(response.body).toContain("Alfredo");
+      expect(response.body.success).toBe(1);
+      expect(response.body.data.affectedRows).toBe(1);
     });
 
     it("should not create an existing user", async () => {
@@ -90,28 +93,34 @@ describe("Users CRUD", () => {
         hierarchy:0
       }
       const response = await request(server)
-      .post("/api/users")
-      .send(newUser)
-      .set('Authorization', `Bearer ${token}`);
+        .post("/api/users")
+        .send(newUser)
+        .set('Authorization', `Bearer ${token}`);
   
-      expect(response.body.sqlMessage).toContain("Duplicate entry 'alfsantos' for key 'users.login_UNIQUE'");
+      expect(response.body.sqlMessage)
+        .toContain("Duplicate entry 'alfsantos' for key 'users.login_UNIQUE'");
     });
 
     it("should find the created user in bd", async () => {
+      const response = await request(server)
+        .get("/api/users/alfsantos")
+        .set('Authorization', `Bearer ${token}`);
 
-  
-      expect(1).toBe(1);
+      userID = response.body.data.id;
+      
+      expect(response.body.data.first_name).toBe("Alfredo");
     });
 
     it("should delete an existing user", async () => {
       
-/*       const response = await request(server)
-      .delete("/api/users")
-      .send(newUser)
-      .set('Authorization', `Bearer ${token}`);
+      const response = await request(server)
+        .delete(`/api/users`)
+        .send({ id : userID })
+        .set('Authorization', `Bearer ${token}`);
   
-      expect(response.body.sqlMessage).toContain("Duplicate entry 'alfsantos' for key 'users.login_UNIQUE'"); */
-      expect(1).toBe(1);
+      expect(response.body.success).toBe(1);
+      expect(response.body.message).toBe("User deleted successfully");
+      
     });
   
   });

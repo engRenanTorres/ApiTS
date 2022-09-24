@@ -52,7 +52,7 @@ export const createUser = (req: Request,res: Response) => {
 
 export const getUserById = (req: Request,res: Response) => {
   const id = req.params.id;
-  getUserByIdService(Number(id), (error, results)=>{
+  getUserByIdService(id, (error, results)=>{
     if(error) {
       return res.status(500).json({
         success: 0,
@@ -75,9 +75,9 @@ export const getUserById = (req: Request,res: Response) => {
   })
 }
 
-export const getUserByEmail = (req: Request,res: Response) => {
-  const email = req.params.email;
-  getUserByEmailService(email, (error, results)=>{
+export const getUserByLoginOrEmail = (req: Request,res: Response) => {
+  const login = req.params.login;
+  getUserByEmailService(login, (error, results)=>{
     if(error) {
       return res.status(500).json({
         success: 0,
@@ -103,7 +103,7 @@ export const getUserByEmail = (req: Request,res: Response) => {
 export const login = (req: Request,res: Response) => {
   const body = req.body;
   try {
-    getUserByEmailService(body.email, (error, results)=>{
+    getUserByEmailService(body.login, (error, results)=>{
       if(error) {
         return res.status(500).json({
           success: 0,
@@ -116,7 +116,7 @@ export const login = (req: Request,res: Response) => {
       if(!results){
         return res.status(400).json({
           success: 0,
-          message: "Invalid email or password or Params not found"
+          message: "Invalid email/login or password or Params not found"
         })
       }
       const checkPassword = compareSync(body.password, results.password);

@@ -35,7 +35,7 @@
               "examples":{
                 "Usuário":{
                   "value":{
-                    "email": "renantorres@ols-br.com",
+                    "login": "renantorres@ols-br.com",
                     "password": "renan123456ols"
                   }
                 }
@@ -103,16 +103,17 @@
       "description": "Esta rota é responsável pela Criação, Leitura, Atualização, Exclusão e login de usuários. O método http definirá o tipo de recurso utilizado.",
       "tags": ["UsuáriosMVNO"],
       "get": {
-        "summary": "Lista todos os usuários",
-        "description": "O método get, sem a passagem de id, é utilizado para listar os usuários MVNO cadastrados.",
+        "summary": "Busca o usuário pelo id, ou pelo login",
+        "description": "O método get com a passagem de id, ou login, é utilizado para listar os usuários MVNO cadastrados.",
         "security": [{"Authorization": [] }],
-        "parameters":{
+
+        "parameters":[{
           "name":"id",
           "in":"path",
           "description":"O id deverá ser enviado para consultas individuais.",
           "required": true,
           "type":"number"
-        },
+        }],
         "responses":{
           "200":{
             "description": "ok.",
@@ -697,7 +698,7 @@
       "login":{
         "type":"object",
         "properties":{
-          "email":{"type":"string"},
+          "login":{"type":"string"},
           "password":{"type":"string"}
         }
       }

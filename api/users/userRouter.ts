@@ -6,7 +6,8 @@ import {
   getUsers, 
   updateUser, 
   deleteUser,
-  login } from "./userController";
+  login, 
+  getUserByLoginOrEmail} from "./userController";
 
 
 const userRouter = Router();

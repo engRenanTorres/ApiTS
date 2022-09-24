@@ -23,7 +23,7 @@ export const create = (data: User, callBack:(error: MysqlError | null, results: 
       }
       return callBack(null, results);
     }
-  )
+  );
 }
 export const getUsers = (callBack:(error: MysqlError | null, results: MySQLResult | null) => void) => {
   pool.query(
@@ -35,31 +35,44 @@ export const getUsers = (callBack:(error: MysqlError | null, results: MySQLResul
       }
       return callBack(null, results);
     }
-  )
+  );
 }
-export const getUserById = (id: number, callBack:(error: MysqlError | null, results: MySQLResult | null) => void) => {
-  pool.query(
-    `SELECT id, first_name, family_names, login, email, hierarchy FROM ${TABLE} WHERE id = ?`,
-    [id],
-    (error, results, fields) => {
-      if(error){
-        return callBack(error,null);
+export const getUserById = (id: string, callBack:(error: MysqlError | null, results: MySQLResult | null) => void) => {
+  if(isNaN(Number(id))){
+    pool.query(
+      `SELECT id, first_name, family_names, login, email, hierarchy FROM ${TABLE} WHERE login = ?`,
+      [id],
+      (error, results, fields) => {
+        if(error){
+          return callBack(error,null);
+        }
+        return callBack(null, results[0]);
       }
-      return callBack(null, results[0]);
-    }
-  )
+    );
+  } else {
+    pool.query(
+      `SELECT id, first_name, family_names, login, email, hierarchy FROM ${TABLE} WHERE id = ?`,
+      [Number(id)],
+      (error, results, fields) => {
+        if(error){
+          return callBack(error,null);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  }
 }
-export const getUserByEmail = (email: string, callBack:(error: MysqlError | null, results?: User | null) => void) => {
+export const getUserByEmail = (login: string, callBack:(error: MysqlError | null, results?: User | null) => void) => {
   pool.query(
-    `SELECT * FROM ${TABLE} WHERE email = ?`,
-    [email],
+    `SELECT * FROM ${TABLE} WHERE email = ? OR login = ?`,
+    [login,login],
     (error, results, fields) => {
       if(error){
         return callBack(error);
       }
       return callBack(null, results[0]);
     }
-  )
+  );
 }
 
 export const updateUser = (data: User, callBack:(error: MysqlError | null, results: MySQLResult | null) => void) => {
@@ -80,7 +93,7 @@ export const updateUser = (data: User, callBack:(error: MysqlError | null, resul
       }
       return callBack(null, results);
     }
-  )
+  );
 }
 export const deleteUser = (data: User, callBack:(error: MysqlError | null, results: MySQLResult | null) => void) => {
   pool.query(
@@ -92,6 +105,6 @@ export const deleteUser = (data: User, callBack:(error: MysqlError | null, resul
       }
       return callBack(null, results.affectedRows);
     }
-  )
+  );
 }
   
