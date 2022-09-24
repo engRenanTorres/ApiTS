@@ -10,7 +10,7 @@ import {
 
 
 const userRouter = Router();
-userRouter.post("/", createUser);
+userRouter.post("/", checkToken, createUser);
 userRouter.get("/:id", checkToken, getUserById);
 userRouter.get("/", checkToken, getUsers);
 userRouter.patch("/", checkToken, updateUser);
