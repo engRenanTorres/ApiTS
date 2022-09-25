@@ -1,7 +1,7 @@
 import express from "express";
-import  userRouter  from "./api/users/userRouter";
+import  userRouter  from "./users/userRouter";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocs from "./swagger.json";
+import swaggerDocs from "../swagger.json";
 
 require("dotenv").config({
     path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"

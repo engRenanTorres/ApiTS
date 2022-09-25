@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.42% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/12</span>
+                <span class='fraction'>10/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -93,21 +93,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -118,24 +118,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { verify } from "jsonwebtoken";
 import { NextFunction, Request, Response } from 'express';
 &nbsp;
-export const checkToken = <span class="fstat-no" title="function not covered" >(r</span>eq :Request , res :Response, next :NextFunction) =&gt; {
-  let token = <span class="cstat-no" title="statement not covered" >req.get("authorization");</span>
-  const tokenPayload = <span class="cstat-no" title="statement not covered" >process.env.TOKEN_KEY;</span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (!tokenPayload) <span class="cstat-no" title="statement not covered" >throw new Error('Token key is not set');</span></span>
-<span class="cstat-no" title="statement not covered" >  if(token){</span>
-<span class="cstat-no" title="statement not covered" >    token = token.slice(7);</span>
-<span class="cstat-no" title="statement not covered" >    verify(</span>
+export const checkToken = (req :Request , res :Response, next :NextFunction) =&gt; {
+  let token = req.get("authorization");
+  const tokenPayload = process.env.TOKEN_KEY;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!tokenPayload) <span class="cstat-no" title="statement not covered" >throw new Error('Token key is not set');</span>
+  if(token){
+    token = token.slice(7);
+    verify(
       token,
       tokenPayload, 
-<span class="fstat-no" title="function not covered" >      (e</span>rror, decode)=&gt;{
-<span class="cstat-no" title="statement not covered" >        if(error){</span>
+      (error, decode)=&gt;{
+        <span class="missing-if-branch" title="if path not taken" >I</span>if(error){
 <span class="cstat-no" title="statement not covered" >          res.json({</span>
             success: 0,
             message: "Invalid token."
           })
-       	} else <span class="cstat-no" title="statement not covered" >next();</span>
+       	} else next();
       });
-  } else {
+  } else <span class="missing-if-branch" title="else path not taken" >E</span>{
 <span class="cstat-no" title="statement not covered" >    res.json({</span>
       success:0,
       message: "Acess denied! Unautorized user."
@@ -148,7 +148,7 @@ export const checkToken = <span class="fstat-no" title="function not covered" >(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-09-18T23:23:23.560Z
+                at 2022-09-24T23:02:04.635Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

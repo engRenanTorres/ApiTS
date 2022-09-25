@@ -1,7 +1,7 @@
 import { Server } from "http";
 import request from "supertest";
 import { UserBase } from "../../api/interfaces/user";
-import app from "../../app";
+import app from "../../api/app";
 
 let token:string;
 let server:Server;
