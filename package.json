@@ -2,7 +2,7 @@
   "name": "apimts",
   "version": "1.0.0",
   "description": "App de autenticacao para a Marica Telecom",
-  "main": "app.ts",
+  "main": "server.ts",
   "author": {
     "name": "Renan Torres",
     "email": "renantorres@ols-br.com"

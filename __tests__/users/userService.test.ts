@@ -37,7 +37,7 @@ describe("Users CRUD", () => {
     it("should return a token", async () => {
         const login = {
               login: "engrtorres@outlook.com",
-              password: "Naribao1"
+              password: "123456"
         }
         const response = await request(server)
           .post("/api/users/login")
