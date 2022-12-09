@@ -9,6 +9,8 @@ import {
   deleteUser as deleteUserService,
   getUserByEmail as getUserByEmailService
 } from "./userService";
+import  errorHandler from '../exceptions/errorHandleFunctions';
+
 require("dotenv").config();
 
 const tokenPayload = process.env.TOKEN_KEY;
@@ -104,25 +106,12 @@ export const login = (req: Request,res: Response) => {
   const body = req.body;
   try {
     getUserByEmailService(body.login, (error, results)=>{
-      if(error) {
-        return res.status(500).json({
-          success: 0,
-          message: "Login error during database conection",
-          errno: error.errno,
-          sqlMessage: error.sqlMessage,
-  
-        });
-      }
-      if(!results){
-        return res.status(400).json({
-          success: 0,
-          message: "Invalid email/login or password or Params not found"
-        })
-      }
+      if(error) return errorHandler.dataBaseError500(error,res);
+      if(!results) return errorHandler.wrongLogin(res);
       const checkPassword = compareSync(body.password, results.password);
       if(checkPassword) {
         const jsonwebtoken:string = sign(
-          { result: results },
+          { login: results.login, role: results.hierarchy },
           tokenPayload,
           {
             expiresIn: "1h"

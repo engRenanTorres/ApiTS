@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Api Maricá Telecom",
+    "title": "Api Basica com sistema de login de usuários",
     "description": "API desenvolvidas para dar suporte tanto ao painel de gerenciamente, quanto ao aplicativo móvel da Maricá Telecom.",
     "contact": {
       "email": "renantorres@ols-br.com"
@@ -236,28 +236,28 @@
                           "nome": "Renan",
                           "login": "Torres",
                           "email": "renantorres@ols-br.com",
-                          "id_grupo_funcionalidade": 2
+                          "hierarchy": 2
                         },
                         {
                           "id": 7,
                           "nome": "Marco",
                           "login": "Robadey",
                           "email": "marcorobadey@ols-br.com",
-                          "id_grupo_funcionalidade": 3
+                          "hierarchy": 3
                         },
                         {
                           "id": 8,
                           "nome": "Matheus",
                           "login": "matheus",
                           "email": "methues@string",
-                          "id_grupo_funcionalidade": 1
+                          "hierarchy": 1
                         },
                         {
                           "id": 9,
                           "nome": "Hudson",
                           "login": "hudsoares",
                           "email": "hudsonsoares@ols-br.com",
-                          "id_grupo_funcionalidade": 2
+                          "hierarchy": 2
                         }
                       ]
                     }

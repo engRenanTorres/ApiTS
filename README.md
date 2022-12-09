@@ -5,8 +5,8 @@
 
 ### Banco de dados
 - Instalar Banco de dados MySQL;
-- Criar arquivo .env com as variáveis: DB_HOST, DB_TABLE, DB_USER, DB_PASS, DB_PORT, APP_PORT, TOKEN_KEY;
-- Criar arquivo .env.test com as variáveis: DB_HOST, DB_TABLE, DB_USER, DB_PASS, DB_PORT, APP_PORT, TOKEN_KEY; (BD destinado aos testes)
+- Criar arquivo .env com as variáveis: DB_HOST, DB_SCHEMA, DB_USER, DB_PASS, DB_PORT, APP_PORT, TOKEN_KEY;
+- Criar arquivo .env.test com as variáveis: DB_HOST, DB_SCHEMA, DB_USER, DB_PASS, DB_PORT, APP_PORT, TOKEN_KEY; (BD destinado aos testes)
 - Criar tabelas no BD de produção e de testes com os campos :
 (id (INT, PK), login (VARCHAR,UNIQUE), email (VARCHAR,UNIQUE), first_name (VARCHAR), family_names (VARCHAR), hierarchy INT, password VARCHAR(200) )
 

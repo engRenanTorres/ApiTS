@@ -104,7 +104,7 @@ require("dotenv").config({
 &nbsp;
 const pool = createPool({
     host: process.env.DB_HOST ||<span class="branch-1 cbranch-no" title="branch not covered" >'10.200.2.19',</span>
-    database: process.env.DB_TABLE ||<span class="branch-1 cbranch-no" title="branch not covered" >'MaricaTelecomTestes',</span>
+    database: process.env.DB_SCHEMA||<span class="branch-1 cbranch-no" title="branch not covered" >'MaricaTelecomTestes',</span>
     user: process.env.DB_USER ||<span class="branch-1 cbranch-no" title="branch not covered" >'',</span>
     password: process.env.DB_PASS ||<span class="branch-1 cbranch-no" title="branch not covered" >'',</span>
     multipleStatements:true,

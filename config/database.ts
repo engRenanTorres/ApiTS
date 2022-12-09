@@ -4,8 +4,8 @@ require("dotenv").config({
 });
 
 const pool = createPool({
-    host: process.env.DB_HOST ||'10.200.2.19',
-    database: process.env.DB_TABLE ||'MaricaTelecomTestes',
+    host: process.env.DB_HOST ||'http://localhost',
+    database: process.env.DB_SCHEMA||'RenanTestes',
     user: process.env.DB_USER ||'',
     password: process.env.DB_PASS ||'',
     multipleStatements:true,
@@ -13,6 +13,9 @@ const pool = createPool({
     connectionLimit:10
 });
 
-
+const tables = {
+    USERS: "users",
+    LOGS: "logs"
+}
 
 export default pool;

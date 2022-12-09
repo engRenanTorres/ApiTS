@@ -2,6 +2,7 @@ import express from "express";
 import  userRouter  from "./users/userRouter";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "../swagger.json";
+import logginMiddleware from "./logging/logginMiddleware";
 
 require("dotenv").config({
     path: process.env.NODE_ENV === "test" ? ".env.test" : ".env"
@@ -9,6 +10,7 @@ require("dotenv").config({
 
 const app = express();
 app.use(express.json());
+app.use(logginMiddleware);
 app.use("/api/users", userRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
