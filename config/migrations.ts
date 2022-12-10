@@ -46,7 +46,7 @@ migrations.connect(function(err:Error) {
     +"INDEX `fk_login_idx` (`login` ASC) VISIBLE,"
     +"CONSTRAINT `fk_login`"
     +"  FOREIGN KEY (`login`)"
-    +"  REFERENCES `renan`.`users` (`login`)"
+    +"  REFERENCES `"+ process.env.DB_SCHEMA +"`.`users` (`login`)"
     +"  ON DELETE NO ACTION"
     +"  ON UPDATE NO ACTION)";
   migrations.query(sql, function (err:Error, result: MySQLResult) {
