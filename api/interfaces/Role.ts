@@ -1,5 +1,5 @@
 export default {
-  AdmMT: 2,
+  AdmMT: 0,
   Dev: 3,
   OperadorCC: 4,
   OperadorCC2: 5,

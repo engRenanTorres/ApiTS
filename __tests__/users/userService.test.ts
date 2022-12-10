@@ -25,7 +25,7 @@ describe("Users CRUD", () => {
   
     it("should return a denied access", async () => {
         const login = {
-              login: "engrtorres@outlook.com",
+              login: "admin@admin.com",
               password: "wrongpassword"
         }
         const response = await request(server).post("/api/users/login")
@@ -36,13 +36,12 @@ describe("Users CRUD", () => {
   
     it("should return a token", async () => {
         const login = {
-              login: "engrtorres@outlook.com",
-              password: "123456"
+              login: "admin@admin.com",
+              password: "admin123456"
         }
         const response = await request(server)
           .post("/api/users/login")
           .send(login);
-  
         token = response.body.token;
   
         expect(response.status).toBe(200);

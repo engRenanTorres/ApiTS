@@ -10,12 +10,54 @@ import {
   getUserByEmail as getUserByEmailService
 } from "./userService";
 import  errorHandler from '../exceptions/errorHandleFunctions';
+import User, { UserBase } from '../interfaces/user';
 
 require("dotenv").config();
 
 const tokenPayload = process.env.TOKEN_KEY;
 if (!tokenPayload) throw new Error('Token key is not set');
 
+export const login = (req: Request,res: Response) => {
+  const body = req.body;
+  try {
+    getUserByEmailService(body.login, (error, results)=>{
+      if(error) return errorHandler.dataBaseError500(error,res);
+      if(!results) return errorHandler.wrongLogin(res);
+      const checkPassword = compareSync(body.password, results.password);
+      if(checkPassword) {
+        const jsonwebtoken:string = sign(
+          { login: results.login, role: results.hierarchy },
+          tokenPayload,
+          {
+            expiresIn: "1h"
+          });
+          return res.status(200).json({
+            success: 1,
+            message: "Login succefuly",
+            token: jsonwebtoken
+          })
+      }
+      else {
+        return res.status(412).json({
+          success: 0,
+          message: "Invalid email or password or Params not found"
+        })
+      }
+    })
+  } catch(error){
+    if(error instanceof Error){
+      return res.status(412).json({
+        success: 0,
+        message: "Missing params.",
+        serverMessage: error.message
+      })
+    }
+    return res.status(500).json({
+      success: 0,
+      message: "Error."
+    })
+  }
+}
 export const createUser = (req: Request,res: Response) => {
   const body = req.body;
   const salt = genSaltSync(10);
@@ -46,6 +88,34 @@ export const createUser = (req: Request,res: Response) => {
       })
     }
     return res.status(500).json({
+      success: 0,
+      message: "Error."
+    })
+  }
+}
+export const createUserFunction = (body: User) => {
+  const salt = genSaltSync(10);
+  try{
+    body.password = hashSync(body.password,salt);
+    create(body,(error, results)=>{
+      if(error) {
+        return ;
+      }
+      return console.log({
+        success: 1,
+        data: results
+      })
+    });
+
+  }catch(error){
+    if(error instanceof Error){
+      return console.log({
+        success: 0,
+        message: "Missing params.",
+        serverMessage: error.message
+      })
+    }
+    return console.log({
       success: 0,
       message: "Error."
     })
@@ -102,47 +172,6 @@ export const getUserByLoginOrEmail = (req: Request,res: Response) => {
   })
 }
 
-export const login = (req: Request,res: Response) => {
-  const body = req.body;
-  try {
-    getUserByEmailService(body.login, (error, results)=>{
-      if(error) return errorHandler.dataBaseError500(error,res);
-      if(!results) return errorHandler.wrongLogin(res);
-      const checkPassword = compareSync(body.password, results.password);
-      if(checkPassword) {
-        const jsonwebtoken:string = sign(
-          { login: results.login, role: results.hierarchy },
-          tokenPayload,
-          {
-            expiresIn: "1h"
-          });
-          return res.status(200).json({
-            success: 1,
-            message: "Login succefuly",
-            token: jsonwebtoken
-          })
-      }
-      else {
-        return res.status(412).json({
-          success: 0,
-          message: "Invalid email or password or Params not found"
-        })
-      }
-    })
-  } catch(error){
-    if(error instanceof Error){
-      return res.status(412).json({
-        success: 0,
-        message: "Missing params.",
-        serverMessage: error.message
-      })
-    }
-    return res.status(500).json({
-      success: 0,
-      message: "Error."
-    })
-  }
-}
 
 export const getUsers = (req: Request,res: Response) => {
   getUsersService((error, results)=>{
@@ -188,7 +217,6 @@ export const updateUser = (req: Request, res: Response) => {
           message: "Failed to update user"
         })
       }
-      console.log(results);
       return res.status(200).json({
         success: 1,
         message: "update successfully"

@@ -2,6 +2,7 @@ import pool from "../../config/database";
 import type User from "../interfaces/user";
 import type MySQLResult from "../interfaces/result";
 import type { MysqlError } from "mysql";
+import { UsersList } from "../interfaces/user";
 
 export const TABLE = "Users";
 
@@ -25,7 +26,7 @@ export const create = (data: User, callBack:(error: MysqlError | null, results: 
     }
   );
 }
-export const getUsers = (callBack:(error: MysqlError | null, results: MySQLResult | null) => void) => {
+export const getUsers = (callBack:(error: MysqlError | null, results: MySQLResult | UsersList | null) => void) => {
   pool.query(
     `SELECT id, first_name, family_names, login, email, hierarchy FROM ${TABLE}`,
     [],

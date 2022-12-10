@@ -3,7 +3,7 @@ import type MySQLResult from "../interfaces/result";
 import type { MysqlError } from "mysql";
 import type Logs from "../interfaces/logs";
 
-export const TABLE = "Logs";
+export const TABLE = "logs";
 
 export const register = (data: Logs) =>{
   pool.query(
